@@ -7,6 +7,7 @@ import StarsCanvas from "@/components/StarBackground";
 import Progressbar from "@/components/Progressbar";
 import { Toaster } from "@/components/ui/sonner";
 import ToastProvider from "@/components/toast";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,12 +24,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={cn(inter.className, "bg-black z-50")}>
-        <Progressbar />
-        <StarsCanvas />
-        <Navbar />
-        <Toaster />
-        <ToastProvider />
-        {children}
+        <Suspense>
+          <Progressbar>
+            <StarsCanvas />
+            <Navbar />
+            <Toaster />
+            <ToastProvider />
+            {children}
+          </Progressbar>
+        </Suspense>
       </body>
     </html>
   );
