@@ -28,7 +28,7 @@ const page = async () => {
   return (
     <div className="max-w-7xl px-2 mx-auto py-4">
       <div className="flex justify-between items-center">
-        <Heading title="Dashboard" description="how are you" />
+        <Heading title="Dashboard" description="Overview of the transport management" />
         {/* <ReportIssue /> */}
       </div>
       <Separator />

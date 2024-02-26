@@ -12,25 +12,23 @@ interface RequestCookie {
 
 
 export async function currentProfile() {
-
     const cookiesStore = cookies();
 
     const tokenValue = cookiesStore.get("token");
 
     try {
-
         if (!tokenValue || !tokenValue.value) {
-            return null;
-        };
-
-        const decode: string | JwtPayload = await jwt.verify(tokenValue.value, process.env.TOKEN_SECRET!);
-
-        // Check if the token has expired
-        if (!decode) {
             return null;
         }
 
-        const user = await fetchAdmin({ id: decode?.id as string });
+        const decode: JwtPayload | string = await jwt.verify(tokenValue.value, process.env.TOKEN_SECRET!);
+
+        // Check if the token has expired
+        if (typeof decode === 'string') {
+            return null;
+        }
+
+        const user = await fetchAdmin({ id: decode.id });
 
         if (!user) {
             return null;
@@ -40,10 +38,10 @@ export async function currentProfile() {
 
     } catch (error) {
         if (error instanceof TokenExpiredError) {
-            return;
-        };
+            return null;
+        }
 
         console.error("Error decoding token", error);
-        return;
+        return null;
     }
 }

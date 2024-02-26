@@ -20,8 +20,6 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import { updateUser } from "@/lib/actions/user.actions";
 import { useRouter } from "next/navigation";
-import BalanceForm from "./Balance";
-import AmountForm from "./Amount";
 import { CellAction } from "./cell-action";
 
 const FormSchema = z.object({
@@ -87,29 +85,20 @@ export const columns: ColumnDef<IUser>[] = [
     {
         accessorKey: "amount",
         header: "Amount paid",
-        cell: ({ row }) => {
-            const id = row.original._id
-            const member = row.original.name
-            const amount = row.original.amount
-            return (
-                <div className="capitalize text-white/80" >
-                    {row.getValue("amount")} {row.getValue("payed") ? null : <AmountForm member={member} amount={amount} id={id} />}
-                </div>
-            )
-        }
+        cell: ({ row }) => (
+            <div className="capitalize text-white/80" >
+                {row.getValue("amount")}
+            </div>
+        )
     },
     {
         accessorKey: "balance",
         header: "Balance",
-        cell: ({ row }) => {
-            const id = row.original._id;
-            const member = row.original.name;
-            const amount = row.original.balance;
+        cell: ({ row }) =>
+        (
+            <div className="capitalize text-white/80">{row.getValue("balance")} </div>
+        )
 
-            return (
-                <div className="capitalize text-white/80">{row.getValue("balance")} {(row.getValue("balance") as number) > 0 ? <BalanceForm member={member} amount={amount} id={id} /> : null}</div>
-            )
-        }
     },
     {
         accessorKey: "carStatus",

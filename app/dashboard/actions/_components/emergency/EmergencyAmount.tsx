@@ -11,35 +11,30 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { BalanceInput } from "./BalanceInput"
+import { PlusCircle } from "lucide-react"
+import { EmergencyAmountForm } from "./EmergencyAmountForm"
 
-interface BalanceProps {
-    id: string;
-    member: string;
-    amount: number;
-}
-const BalanceForm = ({ id, member, amount }: BalanceProps) => {
+
+const EmergencyAmountButton = () => {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button size="sm" variant="destructive" >Enter</Button>
+            <Button size="icon"><PlusCircle className="w-4 h-4" /></Button>
             </DialogTrigger>
             <DialogContent className="w-[96%] max-w-[425px] ">
                 <DialogHeader>
-                    <DialogTitle>Enter Balance</DialogTitle>
+                    <DialogTitle>Enter Amount to pay</DialogTitle>
                     <DialogDescription>
-                        {`Enter Balance for ${member}`}
+                        {`Enter Amount to pay by`}
                     </DialogDescription>
                 </DialogHeader>
-                <div className=" py-2">
-                    <BalanceInput initialAmount={amount} id={id}  />
-
+                <div className="py-4">
+                    <EmergencyAmountForm />
                 </div>
+
             </DialogContent>
         </Dialog>
     )
 }
 
-export default BalanceForm
+export default EmergencyAmountButton

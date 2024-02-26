@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import User, { IUser } from "../models/user.models";
 import { connectToDB } from "../mongoose";
+import Payment from "../models/payment.models";
 
 interface CreateUserProps {
     name: string;
@@ -99,6 +100,7 @@ export async function updateUser(userId: string, values: Partial<CreateUserProps
 }
 
 export async function addToUserAmount(userId: string, amountToAdd: number): Promise<void> {
+    await connectToDB();
     try {
         // Find the user by their ID
         const user: IUser | null = await User.findById(userId);
@@ -107,8 +109,28 @@ export async function addToUserAmount(userId: string, amountToAdd: number): Prom
             throw new Error("User not found");
         }
 
+        const overall = await Payment.find();
+
+        const overallMoney = overall[0].amount as number || 0;
+
+        if (overallMoney <= 0) {
+            throw new Error("Overall Money shouldnt be zero")
+        }
+
+        if(amountToAdd < overallMoney){
+            throw new Error("Cant make payment less than the overall money")
+        }
+        
+        // checking for balance
+        const balanceLeft = amountToAdd - overallMoney;
+
+
         // Add the new amount to the existing amount
         user.amount += amountToAdd;
+
+        if (balanceLeft > 0) {
+            user.balance += balanceLeft;
+        }
 
 
         // Set the payed field to true
@@ -118,6 +140,60 @@ export async function addToUserAmount(userId: string, amountToAdd: number): Prom
         await user.save();
 
         console.log("Amount added successfully for user:", user.name);
+    } catch (error) {
+        console.error("Error adding amount to user:", error);
+        throw error;
+    }
+}
+
+
+
+export async function payUserBalance(userId: string, amountToAdd: number): Promise<void> {
+    await connectToDB();
+    try {
+        // Find the user by their ID
+        const user: IUser | null = await User.findById(userId);
+
+        if (!user) {
+            throw new Error("User not found");
+        }
+
+        user.amount -= amountToAdd;
+        user.balance -= amountToAdd;
+
+        await user.save()
+        console.log("Balance Payed successfully for user:", user.name);
+        
+    } catch (error) {
+        console.error("Error adding amount to user:", error);
+        throw error;
+    }
+
+}
+
+
+export async function resetUser(userId: string): Promise<void> {
+    await connectToDB();
+    try {
+        // Find the user by their ID
+        const user: IUser | null = await User.findById(userId);
+
+        if (!user) {
+            throw new Error("User not found");
+        }
+
+        // Return the amount and balance to default values
+        user.amount = 0;
+        user.balance = 0;
+
+        // Set the payed field and carStatus field to false as defualt values
+        user.payed = false;
+        user.carStatus = false;
+
+        // Save the updated user object to the database
+        await user.save();
+
+        console.log("User was reset sucessfully:", user.name);
     } catch (error) {
         console.error("Error adding amount to user:", error);
         throw error;
