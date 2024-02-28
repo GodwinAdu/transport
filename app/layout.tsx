@@ -23,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn(inter.className, "bg-black z-50 h-screen overflow-hidden")}>
+      <body className={cn(inter.className, "bg-black z-50")}>
         <Suspense>
           <Progressbar>
             <StarsCanvas />
