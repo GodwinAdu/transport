@@ -3,12 +3,6 @@ import jwt, { JwtPayload, TokenExpiredError } from "jsonwebtoken"
 import { fetchAdmin } from "../actions/admin.actions";
 
 
-interface RequestCookie {
-    id: string;
-    username: string;
-    iat: Date
-    exp: Date
-}
 
 
 export async function currentProfile() {

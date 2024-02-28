@@ -6,10 +6,12 @@ import { CreditCard, DollarSign, Package, Users } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { calculateTotalAmount } from "@/lib/actions/account.actions";
+import { calculateOverallAmount, calculateTotalAmount } from "@/lib/actions/account.actions";
 import { countAllUsers, countUsersWithCarStatus, countUsersWithPayed, countUsersWithUnpaid } from "@/lib/actions/member.actions";
 import { currentProfile } from "@/lib/helpers/current-profile";
 import { notFound } from "next/navigation";
+import { interest } from "@/lib/helpers/interest";
+import { losses } from "@/lib/helpers/losses";
 
 
 const page = async () => {
@@ -25,6 +27,12 @@ const page = async () => {
   const unpaidMember = await countUsersWithUnpaid();
 
   const atHand = await calculateTotalAmount();
+
+  const overallMoney = await calculateOverallAmount();
+
+  const profit = await interest();
+
+  const lost  = await losses();
   return (
     <div className="max-w-7xl px-2 mx-auto py-4">
       <div className="flex justify-between items-center">
@@ -96,7 +104,7 @@ const page = async () => {
               <DollarSign className="h-5 w-5 font-bold" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{0}</div>
+              <div className="text-2xl font-bold">{overallMoney ? overallMoney : 0}</div>
             </CardContent>
           </Card>
           <Card className="flex flex-col flex-0 w-full bg-white  transition-all duration-200 hover:text-white hover:bg-red-500">
@@ -118,7 +126,7 @@ const page = async () => {
               <DollarSign className="h-5 w-5 font-bold" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{0}</div>
+              <div className="text-2xl font-bold">{profit ? profit : 0}</div>
             </CardContent>
           </Card>
           <Card className="flex flex-col flex-0 w-full bg-white  transition-all duration-200 hover:text-white hover:bg-red-500">
@@ -129,7 +137,7 @@ const page = async () => {
               <DollarSign className="h-5 w-5 font-bold" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">0</div>
+              <div className="text-2xl font-bold">{lost ? lost : 0}</div>
             </CardContent>
           </Card>
         </div>

@@ -39,6 +39,7 @@ export function LoginForm() {
       password: ""
     },
   })
+  const  { isSubmitting } = form.formState;
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -94,7 +95,9 @@ export function LoginForm() {
             </FormItem>
           )}
         />
-        <Button className="w-full" type="submit">Submit</Button>
+        <Button className="w-full" disabled={isSubmitting} type="submit">
+          {isSubmitting ? "Please wait ..." : "Sign in"}
+        </Button>
       </form>
     </Form>
   )
