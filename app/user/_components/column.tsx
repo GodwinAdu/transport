@@ -73,11 +73,20 @@ export const columns: ColumnDef<IUser>[] = [
     )
   },
   {
+    accessorKey: "cardNumber",
+    header: "card",
+    cell: ({ row }) => (
+      <div className="capitalize text-white/80">{row.getValue("cardNumber")}</div>
+    )
+  },
+  {
     accessorKey: "carStatus",
     header: "Join Car",
     cell: ({ row }) => {
 
       const id = row.original._id;
+      const card = row.original.cardNumber;
+      console.log(card,"card")
       const initialCarstatus = row.original.carStatus;
       const router = useRouter();
 

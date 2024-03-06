@@ -21,7 +21,7 @@ const page = async () => {
     const data: IUser[] = (await fetchUsersWithCar()) || [];
     return (
         <div className="max-w-7xl px-2 mx-auto py-4">
-            <div className="flex justify-between items-center">
+            <div className="flex flex-col md:flex-row justify-between items-center">
                 <Heading title="Manage Members" description="Manage,Edit and oversees all members actions." />
                 <div className="flex gap-4">
                     <Link href="/dashboard" className={cn(buttonVariants())}><ArrowLeft className="mr-2 w-4 h-4" /> Back</Link>

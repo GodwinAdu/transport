@@ -16,23 +16,32 @@ import { losses } from "@/lib/helpers/losses";
 
 const page = async () => {
   const profile = await currentProfile();
-  if (!profile) {notFound()}
 
+  if (!profile) {notFound()}
+  // All members registered in the application 
   const allUsers = await countAllUsers();
 
+  // Members who requested to join the car
   const joinCar = await countUsersWithCarStatus();
 
+  // Members who have successfully pay their fare
   const payedMember = await countUsersWithPayed();
 
+  // Members who payment not yet successful
   const unpaidMember = await countUsersWithUnpaid();
 
+  // Money that we have. money at hand
   const atHand = await calculateTotalAmount();
 
+  // overall money to be collected , atHand * joincar
   const overallMoney = await calculateOverallAmount();
 
+  // any profit
   const profit = await interest();
 
+  // any losses
   const lost  = await losses();
+
   return (
     <div className="max-w-7xl px-2 mx-auto py-4">
       <div className="flex justify-between items-center">

@@ -85,6 +85,13 @@ export const columns: ColumnDef<IUser>[] = [
         )
     },
     {
+        accessorKey: "cardNumber",
+        header: "Card",
+        cell: ({ row }) => (
+            <div className="lowercase text-white/80">{row.getValue("cardNumber")}</div>
+        )
+    },
+    {
         accessorKey: "amount",
         header: "Amount paid",
         cell: ({ row }) => {

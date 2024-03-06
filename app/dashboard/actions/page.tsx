@@ -33,7 +33,7 @@ const page = async () => {
 
     return (
         <div className="max-w-7xl px-2 mx-auto py-4">
-            <div className="flex justify-between items-center">
+            <div className=" flex flex-col md:flex-row justify-between items-center">
                 <Heading title="Action Page" description="Here, you can oversee, modify, update, and regulate the entire application." />
                 <div className="flex gap-4">
                     <Link href="/dashboard" className={cn(buttonVariants())}><ArrowLeft className="mr-2 w-4 h-4" /> Back</Link>
@@ -61,7 +61,7 @@ const page = async () => {
                 </div>
             </div>
             <Separator />
-            <Card className="w-full">
+            {/* <Card className="w-full">
                 <CardHeader>
                     <CardTitle>Overall Amount</CardTitle>
                 </CardHeader>
@@ -72,7 +72,7 @@ const page = async () => {
                         </div>
                     </div>
                 </CardContent>
-            </Card>
+            </Card> */}
 
         </div>
     )

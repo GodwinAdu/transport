@@ -9,6 +9,7 @@ export interface IUser extends Document{
     payed:boolean;
     amount:number;
     balance:number;
+    cardNumber:number;
     createdAt:Date;
     updatedAt:Date;
 }
@@ -35,6 +36,10 @@ export interface IUser extends Document{
         default:0
     },
     balance:{
+        type:Number,
+        default:0
+    },
+    cardNumber:{
         type:Number,
         default:0
     },

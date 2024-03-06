@@ -55,14 +55,30 @@ export async function fetchUsersWithCar() {
     await connectToDB(); // Assuming this function connects to the database
 
     try {
-        // Find all users with carStatus set to true
-        const members = await User.find({ carStatus: true }).lean();
+      // Find all users with carStatus set to true
+      let members = await User.find({ carStatus: true }).lean();
 
-        if (!members) {
-            return [];
-        }
+      if (!members) {
+          return [];
+      }
 
-        return JSON.parse(JSON.stringify(members));
+      // Filter out users without a cardNumber and add a default value to them
+      members = members.map((member) => ({
+          ...member,
+          cardNumber: member.cardNumber || Number.MAX_SAFE_INTEGER, // Assign a large number to users without a cardNumber
+      }));
+
+      // Sort users based on cardNumber
+      members.sort((a, b) => a.cardNumber - b.cardNumber);
+
+      // Map card numbers starting from 1
+      const usersWithCardNumbers = members.map((member, index) => ({
+          ...member,
+          cardNumber: index + 1,
+      }));
+
+        return JSON.parse(JSON.stringify(usersWithCardNumbers));
+        
     } catch (error) {
         console.log("Something went wrong", error);
         throw error;
@@ -109,6 +125,21 @@ export async function addToUserAmount(userId: string, amountToAdd: number): Prom
             throw new Error("User not found");
         }
 
+        const cards = await User.find({carStatus:true})
+
+        console.log(cards)
+
+        const cardArray = cards.map(card=>{
+            return card.cardNumber;
+        });
+
+        console.log(cardArray)
+        
+        const maxCard = Math.max(...cardArray);
+
+        console.log(maxCard, "max card")
+
+
         const overall = await Payment.find();
 
         const overallMoney = overall[0].amount as number || 0;
@@ -120,6 +151,8 @@ export async function addToUserAmount(userId: string, amountToAdd: number): Prom
         if(amountToAdd < overallMoney){
             throw new Error("Cant make payment less than the overall money")
         }
+
+        
         
         // checking for balance
         const balanceLeft = amountToAdd - overallMoney;
@@ -127,6 +160,7 @@ export async function addToUserAmount(userId: string, amountToAdd: number): Prom
 
         // Add the new amount to the existing amount
         user.amount += amountToAdd;
+        user.cardNumber += maxCard + 1;
 
         if (balanceLeft > 0) {
             user.balance += balanceLeft;
@@ -182,9 +216,10 @@ export async function resetUser(userId: string): Promise<void> {
             throw new Error("User not found");
         }
 
-        // Return the amount and balance to default values
+        // Return the amount,balance and card number to default values
         user.amount = 0;
         user.balance = 0;
+        user.cardNumber = 0;
 
         // Set the payed field and carStatus field to false as defualt values
         user.payed = false;

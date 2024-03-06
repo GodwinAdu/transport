@@ -30,7 +30,7 @@ export async function loginAdmin({ username, password }: loginProps) {
 
         if (!isPasswordValid) {
             console.log("password is invalid");
-            return
+            throw new Error("cant login, invalid credentials")
         } else {
             console.log("user is login")
         }
