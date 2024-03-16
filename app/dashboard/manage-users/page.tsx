@@ -1,5 +1,5 @@
 import Heading from '@/components/Heading'
-import { buttonVariants } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/utils'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
@@ -12,6 +12,8 @@ import { IUser } from '@/lib/models/user.models'
 import { fetchUsersWithCar } from '@/lib/actions/user.actions'
 import { currentProfile } from '@/lib/helpers/current-profile'
 import { notFound } from 'next/navigation'
+import { downTransportMembers } from '@/lib/xlsx'
+import DownloadExcel from './_components/DownloadExcel'
 
 const page = async () => {
 
@@ -25,6 +27,7 @@ const page = async () => {
                 <Heading title="Manage Members" description="Manage,Edit and oversees all members actions." />
                 <div className="flex gap-4">
                     <Link href="/dashboard" className={cn(buttonVariants())}><ArrowLeft className="mr-2 w-4 h-4" /> Back</Link>
+                    <DownloadExcel members={data} />
                     <CreateUser />
                 </div>
             </div>
