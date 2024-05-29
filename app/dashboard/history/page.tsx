@@ -20,7 +20,7 @@ const page = async () => {
             </div>
             <Separator />
             {data.length === 0 && (
-                 <div className='w-full mt-24 flex justify-center'>
+                 <div className='w-full mt-24 flex justify-center text-white/90'>
                  <div className='flex flex-col items-center gap-2'>
                    <Rabbit className='h-24 w-24 ' />
                    <h3 className='font-semibold text-xl'>
