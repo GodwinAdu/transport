@@ -31,7 +31,7 @@ const page = async () => {
                </div>
             )}
             {data.map((value) => (
-                <HistoryCard key={value._id} title={value?.title} content={value?.content} />
+                <HistoryCard key={value._id} title={value?.title} content={value?.content} time={value?.createdAt} />
             ))}
         </div>
     )

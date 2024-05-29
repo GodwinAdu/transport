@@ -161,7 +161,7 @@ export async function addToUserAmount(userId: string, amountToAdd: number): Prom
 
         const newHistory = new History({
             title: `${user.name}  make payment`,
-            content: `Payment of Gh${amountToAdd} was made by ${user.name}, ${amountToAdd > overallMoney ? "and we will provide him/her with a balance of" + "" + "Gh" + balanceLeft : "Dept cleared"} `
+            content: `Payment of Gh${amountToAdd} was made by ${user.name}, ${amountToAdd > overallMoney ? `and a balance of Gh${balanceLeft} will be given to` : "Dept cleared"} `
         })
 
         // Add the new amount to the existing amount

@@ -1,6 +1,7 @@
+import moment from "moment"
 
 
-const HistoryCard = ({ title, content }: { title: string, content: string }) => {
+const HistoryCard = ({ title, content,time }: { title: string, content: string,time:Date }) => {
     return (
         <>
             <div className="my-2 divide-y divide-gray-100 rounded-xl border border-gray-100 bg-background">
@@ -44,6 +45,7 @@ const HistoryCard = ({ title, content }: { title: string, content: string }) => 
                     <p className="mt-4 leading-relaxed text-gray-700">
                         {content}
                     </p>
+                    <p>Payment made on {moment(time).format('MMMM Do YYYY, h:mm:ss a')}</p>
                 </details>
 
 
