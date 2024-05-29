@@ -13,7 +13,7 @@ const page = async () => {
     return (
         <div className="max-w-7xl px-2 mx-auto py-4">
             <div className="flex justify-between items-center">
-                <Heading title="helle" description="how are you" />
+                <Heading title="Welcome" description="Use the search to find members" />
                 <ReportIssue />
             </div>
             <Separator />

@@ -20,6 +20,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
+import ResetButton from './_components/ResetButton'
 
 const page = async () => {
 
@@ -43,8 +44,9 @@ const page = async () => {
             <Separator />
             <div className="py-4 flex justify-between items-center px-4 ">
                 <div className="flex gap-4">
-                    <Link href="/dashboard/members" className={cn(buttonVariants())}>All Members</Link>
-                    <Button variant="destructive" >Reset</Button>
+                    <Link href="/dashboard/members" className={cn(buttonVariants({size:"sm"}))}>All Members</Link>
+                    <Link href="/dashboard/history" className={cn(buttonVariants({variant:"secondary",size:"sm"}))}>History</Link>
+                    <ResetButton />
                 </div>
                 {/* <DateTimeComponent /> */}
             </div>

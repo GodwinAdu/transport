@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import User, { IUser } from "../models/user.models";
 import { connectToDB } from "../mongoose";
 import Payment from "../models/payment.models";
+import History from "../models/history.models";
 
 interface CreateUserProps {
     name: string;
@@ -26,7 +27,14 @@ export async function createUser({ name, phone }: CreateUserProps) {
             phone
         });
 
+        const newHistory = new History({
+            title: `New user was created`,
+            content: `A User called ${name} with the phone number ${phone} was created`
+        })
+
         await member.save();
+        await newHistory.save();
+
 
     } catch (error) {
         console.log("something went wrong", error)
@@ -55,30 +63,30 @@ export async function fetchUsersWithCar() {
     await connectToDB(); // Assuming this function connects to the database
 
     try {
-      // Find all users with carStatus set to true
-      let members = await User.find({ carStatus: true }).lean();
+        // Find all users with carStatus set to true
+        let members = await User.find({ carStatus: true }).lean();
 
-      if (!members) {
-          return [];
-      }
+        if (!members) {
+            return [];
+        }
 
-      // Filter out users without a cardNumber and add a default value to them
-      members = members.map((member) => ({
-          ...member,
-          cardNumber: member.cardNumber || Number.MAX_SAFE_INTEGER, // Assign a large number to users without a cardNumber
-      }));
+        // Filter out users without a cardNumber and add a default value to them
+        members = members.map((member) => ({
+            ...member,
+            cardNumber: member.cardNumber || Number.MAX_SAFE_INTEGER, // Assign a large number to users without a cardNumber
+        }));
 
-      // Sort users based on cardNumber
-      members.sort((a, b) => a.cardNumber - b.cardNumber);
+        // Sort users based on cardNumber
+        members.sort((a, b) => a.cardNumber - b.cardNumber);
 
-      // Map card numbers starting from 1
-      const usersWithCardNumbers = members.map((member, index) => ({
-          ...member,
-          cardNumber: index + 1,
-      }));
+        // Map card numbers starting from 1
+        const usersWithCardNumbers = members.map((member, index) => ({
+            ...member,
+            cardNumber: index + 1,
+        }));
 
         return JSON.parse(JSON.stringify(usersWithCardNumbers));
-        
+
     } catch (error) {
         console.log("Something went wrong", error);
         throw error;
@@ -89,6 +97,11 @@ export async function updateUser(userId: string, values: Partial<CreateUserProps
     await connectToDB();
 
     try {
+        const newHistory = new History({
+            title: `A User was Updated`,
+            content: `A User called ${values.name} with the phone number ${values.phone} was updated`
+        })
+
         const updatedMember = await User.findByIdAndUpdate(
             userId,
             { $set: values },
@@ -99,7 +112,7 @@ export async function updateUser(userId: string, values: Partial<CreateUserProps
             console.log("Member not found");
             return null;
         }
-
+        await newHistory.save();
         console.log("Update successful");
         if (path) {
 
@@ -125,16 +138,16 @@ export async function addToUserAmount(userId: string, amountToAdd: number): Prom
             throw new Error("User not found");
         }
 
-        const cards = await User.find({carStatus:true})
+        const cards = await User.find({ carStatus: true })
 
         console.log(cards)
 
-        const cardArray = cards.map(card=>{
+        const cardArray = cards.map(card => {
             return card.cardNumber;
         });
 
         console.log(cardArray)
-        
+
         const maxCard = Math.max(...cardArray);
 
         console.log(maxCard, "max card")
@@ -148,15 +161,13 @@ export async function addToUserAmount(userId: string, amountToAdd: number): Prom
             throw new Error("Overall Money shouldnt be zero")
         }
 
-        if(amountToAdd < overallMoney){
-            throw new Error("Cant make payment less than the overall money")
-        }
-
-        
-        
         // checking for balance
         const balanceLeft = amountToAdd - overallMoney;
 
+        const newHistory = new History({
+            title: `${user.name}  make payment`,
+            content: `Payment of ${amountToAdd} was made by ${user.name}, ${amountToAdd > overallMoney ? "and we will provide him/her with a balance of" + balanceLeft : "Dept cleared" } `
+        })
 
         // Add the new amount to the existing amount
         user.amount += amountToAdd;
@@ -172,6 +183,7 @@ export async function addToUserAmount(userId: string, amountToAdd: number): Prom
 
         // Save the updated user object to the database
         await user.save();
+        await newHistory.save();
 
         console.log("Amount added successfully for user:", user.name);
     } catch (error) {
@@ -191,13 +203,18 @@ export async function payUserBalance(userId: string, amountToAdd: number): Promi
         if (!user) {
             throw new Error("User not found");
         }
+        const newHistory = new History({
+            title: `Balance provided to ${user.name} `,
+            content: `Balance of ${amountToAdd} was pay to ${user.name}, debt cleared`
+        })
 
         user.amount -= amountToAdd;
         user.balance -= amountToAdd;
 
         await user.save()
+        await newHistory.save();
         console.log("Balance Payed successfully for user:", user.name);
-        
+
     } catch (error) {
         console.error("Error adding amount to user:", error);
         throw error;
