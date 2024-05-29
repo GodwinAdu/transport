@@ -97,10 +97,6 @@ export async function updateUser(userId: string, values: Partial<CreateUserProps
     await connectToDB();
 
     try {
-        const newHistory = new History({
-            title: `A User was Updated`,
-            content: `A User called ${values.name} with the phone number ${values.phone} was updated`
-        })
 
         const updatedMember = await User.findByIdAndUpdate(
             userId,
@@ -112,7 +108,6 @@ export async function updateUser(userId: string, values: Partial<CreateUserProps
             console.log("Member not found");
             return null;
         }
-        await newHistory.save();
         console.log("Update successful");
         if (path) {
 
@@ -166,7 +161,7 @@ export async function addToUserAmount(userId: string, amountToAdd: number): Prom
 
         const newHistory = new History({
             title: `${user.name}  make payment`,
-            content: `Payment of ${amountToAdd} was made by ${user.name}, ${amountToAdd > overallMoney ? "and we will provide him/her with a balance of" + balanceLeft : "Dept cleared" } `
+            content: `Payment of Gh${amountToAdd} was made by ${user.name}, ${amountToAdd > overallMoney ? "and we will provide him/her with a balance of" + "" + "Gh" + balanceLeft : "Dept cleared"} `
         })
 
         // Add the new amount to the existing amount
@@ -205,7 +200,7 @@ export async function payUserBalance(userId: string, amountToAdd: number): Promi
         }
         const newHistory = new History({
             title: `Balance provided to ${user.name} `,
-            content: `Balance of ${amountToAdd} was pay to ${user.name}, debt cleared`
+            content: `Balance of Gh${amountToAdd} was pay to ${user.name}, debt cleared`
         })
 
         user.amount -= amountToAdd;

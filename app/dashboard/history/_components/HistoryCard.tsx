@@ -3,8 +3,8 @@
 const HistoryCard = ({ title, content }: { title: string, content: string }) => {
     return (
         <>
-            <div className="divide-y divide-gray-100 rounded-xl border border-gray-100 bg-white">
-                <details className="group p-6 [&_summary::-webkit-details-marker]:hidden" open>
+            <div className="my-2 divide-y divide-gray-100 rounded-xl border border-gray-100 bg-background">
+                <details className="group p-6 [&_summary::-webkit-details-marker]:hidden">
                     <summary className="flex cursor-pointer items-center justify-between gap-1.5 text-gray-900">
                         <h2 className="text-lg font-medium">{title}</h2>
 

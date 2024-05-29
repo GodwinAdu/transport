@@ -3,6 +3,7 @@ import { Separator } from '@/components/ui/separator'
 import { fetchAllHistory } from '@/lib/actions/history.actions'
 import React from 'react'
 import HistoryCard from './_components/HistoryCard'
+import { Rabbit } from 'lucide-react'
 type HistoryProps = {
     _id: string;
     title: string;
@@ -19,7 +20,15 @@ const page = async () => {
             </div>
             <Separator />
             {data.length === 0 && (
-                <p className="font-bold text-xl"> No history yet</p>
+                 <div className='w-full mt-24 flex justify-center'>
+                 <div className='flex flex-col items-center gap-2'>
+                   <Rabbit className='h-24 w-24 ' />
+                   <h3 className='font-semibold text-xl'>
+                     No history yet
+                   </h3>
+                   <p>We track and save only the transaction that goes on in this application.</p>
+                 </div>
+               </div>
             )}
             {data.map((value) => (
                 <HistoryCard key={value._id} title={value?.title} content={value?.content} />
