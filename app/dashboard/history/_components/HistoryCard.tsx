@@ -45,7 +45,7 @@ const HistoryCard = ({ title, content,time }: { title: string, content: string,t
                     <p className="mt-4 leading-relaxed text-gray-700">
                         {content}
                     </p>
-                    <p>Payment made on {moment(time).format('MMMM Do YYYY, h:mm:ss a')}</p>
+                    <p className="text-xs italic">Payment made on <span className="font-bold">{moment(time).format('MMMM Do YYYY, h:mm:ss a')}</span></p>
                 </details>
 
 
