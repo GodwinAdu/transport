@@ -95,14 +95,17 @@ export const columns: ColumnDef<IUser>[] = [
         accessorKey: "amount",
         header: "Amount paid",
         cell: ({ row }) => {
-            const id = row.original._id
-            const member = row.original.name
-            const amount = row.original.amount
+            const id = row.original._id;
+            const member = row.original.name;
+            const amount = row.original.amount;
+            const totalAmount = row.original.totalAmount;
+            const payed = row.original.payed;
+    
             return (
-                <div className="capitalize text-white/80" >
-                    {row.getValue("amount")} {row.getValue("payed") ? null : <AmountForm member={member} amount={amount} id={id} />}
+                <div className="capitalize text-white/80 ">
+                    {amount} {amount < totalAmount ? <AmountForm member={member} amount={amount} id={id} /> :null}
                 </div>
-            )
+            );
         }
     },
     {

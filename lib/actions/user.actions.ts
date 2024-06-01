@@ -45,10 +45,12 @@ export async function createUser({ name, phone }: CreateUserProps) {
 export async function fetchUsers() {
     await connectToDB();
     try {
+
         const members = await User.find({}).lean();
         if (!members) {
             return [];
         }
+
 
         return JSON.parse(JSON.stringify(members));
 
@@ -60,9 +62,14 @@ export async function fetchUsers() {
 
 // fetch all members who will join the transport 
 export async function fetchUsersWithCar() {
-    await connectToDB(); // Assuming this function connects to the database
-
     try {
+        // Connect to the database
+        await connectToDB(); // Assuming this function connects to the database
+
+        // Fetch the total payment amount
+        const overall = await Payment.find();
+        const overallMoney = overall[0]?.amount || 0;
+
         // Find all users with carStatus set to true
         let members = await User.find({ carStatus: true }).lean();
 
@@ -83,10 +90,11 @@ export async function fetchUsersWithCar() {
         const usersWithCardNumbers = members.map((member, index) => ({
             ...member,
             cardNumber: index + 1,
+            totalAmount: overallMoney // Add the total amount to each user's data
         }));
 
+        // Return the data as JSON
         return JSON.parse(JSON.stringify(usersWithCardNumbers));
-
     } catch (error) {
         console.log("Something went wrong", error);
         throw error;

@@ -11,6 +11,7 @@ export interface IUser extends Document{
     balance:number;
     cardNumber:number;
     createdAt:Date;
+    totalAmount?:Number;
     updatedAt:Date;
 }
 

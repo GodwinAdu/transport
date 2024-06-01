@@ -21,6 +21,8 @@ const page = async () => {
     if (!profile) { notFound() }
 
     const data: IUser[] = (await fetchUsersWithCar()) || [];
+
+    console.log(data,"user sdata")
     return (
         <div className="max-w-7xl px-2 mx-auto py-4">
             <div className="flex flex-col md:flex-row justify-between items-center">
