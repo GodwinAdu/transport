@@ -156,7 +156,7 @@ export async function addToUserAmount(userId: string, amountToAdd: number): Prom
         console.log(maxCard, "max card")
 
 
-        const overall = await Payment.find();
+        const overall = await Payment.find({});
 
         const overallMoney = overall[0].amount as number || 0;
 
@@ -165,11 +165,13 @@ export async function addToUserAmount(userId: string, amountToAdd: number): Prom
         }
 
         // checking for balance
-        const balanceLeft = amountToAdd - overallMoney;
+
+        const totalAmount = user.amount + amountToAdd
+        const balanceLeft = totalAmount - overallMoney;
 
         const newHistory = new History({
             title: `${user.name}  make payment`,
-            content: `Payment of Gh${amountToAdd} was made by ${user.name}, ${amountToAdd > overallMoney ? `and a balance of Gh${balanceLeft} will be given to` : "Dept cleared"} `
+            content: `Payment of Gh${amountToAdd} was made by ${user.name}, ${totalAmount > overallMoney ? `and a balance of Gh${balanceLeft} will be given to` : "Dept cleared"} `
         })
 
         // Add the new amount to the existing amount
