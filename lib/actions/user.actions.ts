@@ -143,17 +143,11 @@ export async function addToUserAmount(userId: string, amountToAdd: number): Prom
 
         const cards = await User.find({ carStatus: true })
 
-        console.log(cards)
-
         const cardArray = cards.map(card => {
             return card.cardNumber;
         });
 
-        console.log(cardArray)
-
         const maxCard = Math.max(...cardArray);
-
-        console.log(maxCard, "max card")
 
 
         const overall = await Payment.find({});
@@ -187,8 +181,10 @@ export async function addToUserAmount(userId: string, amountToAdd: number): Prom
         user.payed = true;
 
         // Save the updated user object to the database
-        await user.save();
-        await newHistory.save();
+        await Promise.all([
+            user.save(),
+            newHistory.save()
+        ]);
 
         console.log("Amount added successfully for user:", user.name);
     } catch (error) {
