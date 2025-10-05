@@ -5,7 +5,7 @@ import { connectToDB } from "../mongoose"
 import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
 import { IUser } from "../models/user.models";
-
+import bcryptjs from "bcryptjs";
 
 interface loginProps {
     username: string;
@@ -26,7 +26,7 @@ export async function loginAdmin({ username, password }: loginProps) {
             username: user?.username,    
         };
 
-        const isPasswordValid = await Admin.findOne({password});
+        const isPasswordValid = await bcryptjs.compare(password, user.password);
 
         if (!isPasswordValid) {
             console.log("password is invalid");

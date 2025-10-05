@@ -101,7 +101,7 @@ export async function fetchUsersWithCar() {
     }
 }
 
-export async function updateUser(userId: string, values: Partial<CreateUserProps>, path?: string) {
+export async function updateUser(userId: string, values: Partial<CreateUserProps>, path?: string,) {
     await connectToDB();
 
     try {

@@ -2,7 +2,7 @@
 
 import Admin from "../models/admin.models";
 import { connectToDB } from "../mongoose";
-
+import bcryptjs from "bcryptjs";
 interface FetchAdminProps {
     id: string;
 }
@@ -23,5 +23,25 @@ export async function fetchAdmin({ id }: FetchAdminProps) {
 
     } catch (error: any) {
         console.log("Unable to fetch user", error)
+    }
+}
+
+
+
+export async function createAdmin(username: string, password: string) {
+    try {
+        await connectToDB();
+
+        const hashed = await bcryptjs.hash(password, 12);
+
+        const user = new Admin({
+            username,
+            password: hashed
+        })
+
+        await user.save();
+
+    } catch (error) {
+        console.log("Unable to create admin", error)
     }
 }
